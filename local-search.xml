@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>Hexo Fluid 配置 Giscus</title>
+    <link href="/2025/03/29/Hexo-Fluid-%E9%85%8D%E7%BD%AE-Giscus/"/>
+    <url>/2025/03/29/Hexo-Fluid-%E9%85%8D%E7%BD%AE-Giscus/</url>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><p>使用Giscus在Hexo Fluid文章中评论功能。</p><p>giscus官网：<a href="https://giscus.app/zh-CN">https://giscus.app</a></p><h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><ul><li>准备一个github的公开仓库</li><li>为该仓库安装 <code>giscus App</code>, <a href="https://github.com/apps/giscus">安装giscus App</a></li><li>在该仓库中开启<code>Discussions</code>功能,<a href="https://docs.github.com/en/github/administering-a-repository/managing-repository-settings/enabling-or-disabling-github-discussions-for-a-repository">在你的仓库中启用</a></li></ul><h1 id="Giscus-的运作原理"><a href="#Giscus-的运作原理" class="headerlink" title="Giscus 的运作原理"></a>Giscus 的运作原理</h1><p>&emsp;&emsp; giscus 加载时，会使用 GitHub Discussions 搜索 API 根据选定的映射方式（如 <code>URL</code>、<code>pathname</code>、<code>&lt;title&gt;</code> 等）来查找与当前页面关联的 discussion。如果找不到匹配的 discussion，giscus bot 就会在第一次有人留下评论或回应时自动创建一个 discussion。</p><p>&emsp;&emsp;访客如果想要评论，必须按照 GitHub OAuth 流程授权 giscus app 代表他发布，或者可以直接在 GitHub Discussion 里评论。你可以在 GitHub 上管理评论。</p><h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>&emsp;&emsp;接下来在 giscus 的官网 配置模块选择所需配置：<br><img src="image-1.png" alt=""><br>&emsp;&emsp;其中 Discussion 分类那里 giscus 推荐使用的 是 Announcements ，但是我没有弄好，索性就用 General 了，全部选好后，下边会出现一个你选的配置 <code>&lt;script&gt;</code> 标签。在 Fluid 的 <code>_config.yml</code> 文件中把对应位置 配置填上去即可。</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">giscus:</span><br>  <span class="hljs-attr">repo:</span> <br>  <span class="hljs-attr">repo_id:</span> <br>  <span class="hljs-attr">category:</span> <br>  <span class="hljs-attr">category_id:</span> <br>  <span class="hljs-comment"># Available values: pathname | url | title | og:title</span><br>  <span class="hljs-attr">mapping:</span> <span class="hljs-string">pathname</span><br>  <span class="hljs-comment"># Available values: 0 | 1</span><br>  <span class="hljs-attr">reactions_enabled:</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment"># Available values: 0 | 1</span><br>  <span class="hljs-attr">emit_metadata:</span> <span class="hljs-number">0</span><br>  <span class="hljs-comment"># Available values: light | dark | dark_high_contrast | transparent_dark | preferred-color-scheme</span><br>  <span class="hljs-attr">theme:</span> <span class="hljs-string">preferred_color_scheme</span><br>  <span class="hljs-comment"># Available values: en | zh-CN</span><br>  <span class="hljs-attr">lang:</span> <span class="hljs-string">zh-CN</span><br>  <span class="hljs-comment"># Place the comment box above the comments</span><br>  <span class="hljs-attr">input_position:</span> <span class="hljs-string">top</span><br></code></pre></td></tr></table></figure><p>&emsp;&emsp;注意在 Fluid 开启评论插件<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-comment"># 评论插件</span><br><span class="hljs-comment"># Comment plugin</span><br><span class="hljs-attr">comments:</span><br><span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br><span class="hljs-comment"># 指定的插件，需要同时设置对应插件的必要参数</span><br><span class="hljs-comment"># The specified plugin needs to set the necessary parameters at the same time</span><br><span class="hljs-comment"># Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo | cusdis | giscus | discuss</span><br><span class="hljs-attr">type:</span> <span class="hljs-string">giscus</span><br></code></pre></td></tr></table></figure></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Hexo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>考研记录</title>
     <link href="/2025/03/25/%E8%80%83%E7%A0%94%E8%AE%B0%E5%BD%95/"/>
     <url>/2025/03/25/%E8%80%83%E7%A0%94%E8%AE%B0%E5%BD%95/</url>
