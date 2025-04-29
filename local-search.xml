@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>conda文档</title>
+    <link href="/2025/04/01/conda%E6%96%87%E6%A1%A3/"/>
+    <url>/2025/04/01/conda%E6%96%87%E6%A1%A3/</url>
+    
+    <content type="html"><![CDATA[<h1 id="1-conda手册"><a href="#1-conda手册" class="headerlink" title="1. conda手册"></a>1. conda手册</h1><div class="row">    <embed src="/pdf/conda-24.4.0.pdf" width="100%" height="550" type="application/pdf"></div><h1 id="2-hexo-常用操作"><a href="#2-hexo-常用操作" class="headerlink" title="2. hexo 常用操作"></a>2. hexo 常用操作</h1><p>hexo 文档：<a href="https://hexo.io/zh-cn/docs/">https://hexo.io/zh-cn/docs/</a></p><h2 id="2-1-文章"><a href="#2-1-文章" class="headerlink" title="2.1 文章"></a>2.1 文章</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new [layout] &lt;title&gt;<br></code></pre></td></tr></table></figure><p>Hexo 有三种默认布局：post、page 和 draft。 每个布局创建的文件会被保存到不同的路径。 新创建的帖子被保存到 source/_post 文件夹。</p><blockquote><p>布局路径<br>post：source/_posts；<br>page：source；<br>draft：source/_drafts；</p></blockquote><h2 id="2-2-草稿"><a href="#2-2-草稿" class="headerlink" title="2.2 草稿"></a>2.2 草稿</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo publish [layout] &lt;title&gt;<br></code></pre></td></tr></table></figure><p>在本地编辑时如果要看到草稿的预览内容，在启动命令后加上<code>--draft</code>选项或在 <code>_config.yml</code> 启用 <code>render_draft</code> 设置来渲染草稿。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo s --draft<br></code></pre></td></tr></table></figure></p><h2 id="2-3-在文章中支持pdf展示"><a href="#2-3-在文章中支持pdf展示" class="headerlink" title="2.3 在文章中支持pdf展示"></a>2.3 在文章中支持pdf展示</h2><p>懒人办法：</p><ol><li>安装pdf插件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install --save hexo-pdf<br></code></pre></td></tr></table></figure></li><li>在source文件夹下新建一个 <code>pdf</code> 文件夹，把需要展示的pdf放到该文件夹下。</li><li>在正文部分添加<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">&#123;% pdf /pdf/pdf-name.pdf %&#125;<br></code></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hexo Fluid 配置 Giscus</title>
     <link href="/2025/03/29/Hexo-Fluid-%E9%85%8D%E7%BD%AE-Giscus/"/>
     <url>/2025/03/29/Hexo-Fluid-%E9%85%8D%E7%BD%AE-Giscus/</url>
