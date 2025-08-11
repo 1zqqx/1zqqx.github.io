@@ -4,6 +4,29 @@
   
   
   <entry>
+    <title>VMware此平台不支持虚拟化的“amd-v/rvi”的解决方法</title>
+    <link href="/2025/08/10/VMware%E6%AD%A4%E5%B9%B3%E5%8F%B0%E4%B8%8D%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9A%84%E2%80%9Camd-v-rvi%E2%80%9D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
+    <url>/2025/08/10/VMware%E6%AD%A4%E5%B9%B3%E5%8F%B0%E4%B8%8D%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9A%84%E2%80%9Camd-v-rvi%E2%80%9D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在vmware中安装使用eveng发现报错<code>此平台不支持虚拟化的“amd-v/rvi”</code>，</p><h2 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法 1"></a>解决方法 1</h2><p>上网搜了一下发现是<code>hyper-v</code>与<code>vmware</code>冲突导致，需要将与其相关的功能关闭。</p><ol><li><p>关闭如下图所示功能：<br><img src="image1.png" alt="img" title="要关闭的功能"></p></li><li><p>关闭内存完整性<br>打开 Windows 安全中心 -&gt; 设备安全性 -&gt; 内核隔离 -&gt; 内核隔离详细信息，然后将内存完整性关闭。</p></li></ol><h2 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法 2"></a>解决方法 2</h2><p>但是错误并没有解决，继续搜索发现如下解决办法：</p><ol><li><p>Win11 24H2镜像出货的机型会默认打开“Virtualization-based Security（VBS）基于虚拟化的安全性”功能，此功能打开可能会导致部分游戏性能下降卡顿等情况，查看设备是否开启了VBS，<code>Win+R</code>呼出运行框，输入<code>msinfo32</code>查看VBS的运行状态，我的已经关闭了，网图如下：<br><img src="image2.png" alt="img" title="基于虚拟化的安全性 正在运行"></p></li><li><p>执行bat脚本，关闭基于虚拟化的安全性。具体脚本内容如下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash">@<span class="hljs-built_in">echo</span> off<br><br>dism /Online /Disable-Feature:microsoft-hyper-v-all /NoRestart<br>dism /Online /Disable-Feature:IsolatedUserMode /NoRestart<br>dism /Online /Disable-Feature:Microsoft-Hyper-V-Hypervisor /NoRestart<br>dism /Online /Disable-Feature:Microsoft-Hyper-V-Online /NoRestart<br>dism /Online /Disable-Feature:HypervisorPlatform /NoRestart<br><br>REM ===========================================<br><br>mountvol X: /s<br>copy %WINDIR%\System32\SecConfig.efi X:\EFI\Microsoft\Boot\SecConfig.efi /Y<br>bcdedit /create &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; /d <span class="hljs-string">&quot;DebugTool&quot;</span> /application osloader<br>bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; path <span class="hljs-string">&quot;\EFI\Microsoft\Boot\SecConfig.efi&quot;</span><br>bcdedit /set &#123;bootmgr&#125; bootsequence &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125;<br>bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; loadoptions DISABLE-LSA-ISO,DISABLE-VBS<br>bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; device partition=X:<br>mountvol X: /d<br>bcdedit /set hypervisorlaunchtype off<br><br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span> =======================================================<br><span class="hljs-built_in">echo</span> 当前操作已完成，接下来请关闭此窗口并重启电脑，然后根据屏幕提示完成剩下操作。<br>pause &gt; nul<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br></code></pre></td></tr></table></figure></li><li><p>将文本保存为<code>.bat</code>格式的文件，右键<code>管理员权限</code>运行，等待设备重启之后，<code>按四次F3</code>，即可关闭。重新打开虚拟机，设备正常。</p></li></ol><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol><li><a href="https://zhuanlan.zhihu.com/p/614643382">https://zhuanlan.zhihu.com/p/614643382</a></li><li><a href="https://blog.51cto.com/wangguangjie/13480278">https://blog.51cto.com/wangguangjie/13480278</a></li></ol>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>VMware</tag>
+      
+      <tag>Windows 11</tag>
+      
+      <tag>虚拟化</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C语言宏</title>
     <link href="/2025/05/10/C%E8%AF%AD%E8%A8%80%E5%AE%8F/"/>
     <url>/2025/05/10/C%E8%AF%AD%E8%A8%80%E5%AE%8F/</url>

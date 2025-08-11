@@ -19,24 +19,27 @@
   <meta name="author" content="1zqqx">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在 C 语言中，宏（Macro）是一种预处理指令，用于在编译前对源代码进行文本替换。 宏由预处理指令 #define 定义，分为两种类型：  对象式宏（Object-like Macro）：无参数的简单文本替换。 函数式宏（Function-like Macro）：带参数的类似函数调用的宏。  对象式宏#define 标识符 替换文本 123#define PI 3.14159 &#x2F;&#x2F; 定义常量（如">
+    <meta name="description" content="问题在vmware中安装使用eveng发现报错此平台不支持虚拟化的“amd-v&#x2F;rvi”， 解决方法 1上网搜了一下发现是hyper-v与vmware冲突导致，需要将与其相关的功能关闭。  关闭如下图所示功能：  关闭内存完整性打开 Windows 安全中心 -&gt; 设备安全性 -&gt; 内核隔离 -&gt; 内核隔离详细信息，然后将内存完整性关闭。   解决方法 2但是错误并没有解决，继续">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言宏">
-<meta property="og:url" content="https://1zqqx.github.io/2025/05/10/C%E8%AF%AD%E8%A8%80%E5%AE%8F/index.html">
+<meta property="og:title" content="VMware此平台不支持虚拟化的“amd-v&#x2F;rvi”的解决方法">
+<meta property="og:url" content="https://1zqqx.github.io/2025/08/10/VMware%E6%AD%A4%E5%B9%B3%E5%8F%B0%E4%B8%8D%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9A%84%E2%80%9Camd-v-rvi%E2%80%9D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="1zqqx">
-<meta property="og:description" content="在 C 语言中，宏（Macro）是一种预处理指令，用于在编译前对源代码进行文本替换。 宏由预处理指令 #define 定义，分为两种类型：  对象式宏（Object-like Macro）：无参数的简单文本替换。 函数式宏（Function-like Macro）：带参数的类似函数调用的宏。  对象式宏#define 标识符 替换文本 123#define PI 3.14159 &#x2F;&#x2F; 定义常量（如">
+<meta property="og:description" content="问题在vmware中安装使用eveng发现报错此平台不支持虚拟化的“amd-v&#x2F;rvi”， 解决方法 1上网搜了一下发现是hyper-v与vmware冲突导致，需要将与其相关的功能关闭。  关闭如下图所示功能：  关闭内存完整性打开 Windows 安全中心 -&gt; 设备安全性 -&gt; 内核隔离 -&gt; 内核隔离详细信息，然后将内存完整性关闭。   解决方法 2但是错误并没有解决，继续">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://1zqqx.github.io/2025/05/10/C%E8%AF%AD%E8%A8%80%E5%AE%8F/image1.png">
-<meta property="article:published_time" content="2025-05-10T13:09:09.000Z">
-<meta property="article:modified_time" content="2025-05-10T14:13:02.337Z">
+<meta property="og:image" content="https://1zqqx.github.io/2025/08/10/VMware%E6%AD%A4%E5%B9%B3%E5%8F%B0%E4%B8%8D%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9A%84%E2%80%9Camd-v-rvi%E2%80%9D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/image1.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/08/10/VMware%E6%AD%A4%E5%B9%B3%E5%8F%B0%E4%B8%8D%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9A%84%E2%80%9Camd-v-rvi%E2%80%9D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/image2.png">
+<meta property="article:published_time" content="2025-08-10T02:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-11T02:10:11.048Z">
 <meta property="article:author" content="1zqqx">
-<meta property="article:tag" content="C">
+<meta property="article:tag" content="VMware">
+<meta property="article:tag" content="Windows 11">
+<meta property="article:tag" content="虚拟化">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://1zqqx.github.io/2025/05/10/C%E8%AF%AD%E8%A8%80%E5%AE%8F/image1.png">
+<meta name="twitter:image" content="https://1zqqx.github.io/2025/08/10/VMware%E6%AD%A4%E5%B9%B3%E5%8F%B0%E4%B8%8D%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9A%84%E2%80%9Camd-v-rvi%E2%80%9D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/image1.png">
   
   
   
-  <title>C语言宏 - 1zqqx</title>
+  <title>VMware此平台不支持虚拟化的“amd-v/rvi”的解决方法 - 1zqqx</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +205,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="C语言宏"></span>
+            <span id="subtitle" data-typed-text="VMware此平台不支持虚拟化的“amd-v/rvi”的解决方法"></span>
           
         </div>
 
@@ -213,8 +216,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-05-10 21:09" pubdate>
-          2025年5月10日 晚上
+        <time datetime="2025-08-10 10:00" pubdate>
+          2025年8月10日 上午
         </time>
       </span>
     
@@ -225,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          639 字
+          473 字
         
       </span>
     
@@ -236,7 +239,7 @@
         
         
         
-          6 分钟
+          4 分钟
         
       </span>
     
@@ -273,33 +276,33 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">C语言宏</h1>
+            <h1 id="seo-header">VMware此平台不支持虚拟化的“amd-v/rvi”的解决方法</h1>
             
             
               <div class="markdown-body">
                 
-                <p>在 C 语言中，宏（Macro）是一种预处理指令，用于在<strong>编译前</strong>对源代码进行文本替换。</p>
-<p>宏由预处理指令 <code>#define</code> 定义，分为两种类型：</p>
-<ul>
-<li>对象式宏（Object-like Macro）：无参数的简单文本替换。</li>
-<li>函数式宏（Function-like Macro）：带参数的类似函数调用的宏。</li>
-</ul>
-<h2 id="对象式宏"><a href="#对象式宏" class="headerlink" title="对象式宏"></a>对象式宏</h2><p><code>#define 标识符 替换文本</code></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> PI 3.14159 <span class="hljs-comment">// 定义常量（如 PI、MAX_SIZE）。</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MAX_SIZE 100 </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> DEBUG <span class="hljs-comment">// 条件编译（如 #ifdef DEBUG）。</span></span><br></code></pre></td></tr></table></figure>
-<h2 id="函数式宏"><a href="#函数式宏" class="headerlink" title="函数式宏"></a>函数式宏</h2><p><code>#define 宏名(参数列表) 替换文本</code></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 简单函数式宏</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SQUARE(x) ((x) * (x))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MAX(a, b) ((a) &gt; (b) ? (a) : (b))</span><br><br><span class="hljs-comment">// 多行宏（用反斜杠 \ 连接）</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWAP(a, b) \</span><br><span class="hljs-meta">    do &#123; \</span><br><span class="hljs-meta">        typeof(a) temp = (a); \</span><br><span class="hljs-meta">        (a) = (b); \</span><br><span class="hljs-meta">        (b) = temp; \</span><br><span class="hljs-meta">    &#125; while (0)</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> x = <span class="hljs-number">5</span>;<br>    <span class="hljs-type">int</span> y = <span class="hljs-number">10</span>;<br>    <br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Square: %d\n&quot;</span>, SQUARE(x));      <span class="hljs-comment">// 展开为 ((x) * (x))</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Max: %d\n&quot;</span>, MAX(x, y));         <span class="hljs-comment">// 展开为 ((x) &gt; (y) ? (x) : (y))</span><br>    <br>    SWAP(x, y);                             <span class="hljs-comment">// 展开为一个 do-while 语句</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Swapped: x=%d, y=%d\n&quot;</span>, x, y);  <span class="hljs-comment">// 输出: x=10, y=5</span><br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>注意事项</p>
-<blockquote>
-<p>括号保护：参数和整个表达式都应加括号，避免运算符优先级问题。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> ADD(a, b) a + b  <span class="hljs-comment">// ADD(2, 3) * 4 会展开为 2 + 3 * 4 = 14</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ADD(a, b) ((a) + (b))  <span class="hljs-comment">// 展开为 ((2) + (3)) * 4 = 20</span></span><br></code></pre></td></tr></table></figure><br>参数不计算：宏参数是纯文本替换，不会提前求值</p>
-</blockquote>
-<h2 id="预处理器操作符-与"><a href="#预处理器操作符-与" class="headerlink" title="预处理器操作符#与##"></a>预处理器操作符<code>#</code>与<code>##</code></h2><h3 id="操作符（字符串化）"><a href="#操作符（字符串化）" class="headerlink" title="操作符（字符串化）"></a>操作符（字符串化）</h3><p>将宏参数转换为字符串常量，参数会被直接转换为字符串，不会进行表达式求值或变量替换；如果参数本身是字符串，会自动添加额外的引号（例如 “abc” 会变成 “\”abc\””）。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> PRINT(x) printf(#x <span class="hljs-string">&quot; = %d\n&quot;</span>, x)</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> num = <span class="hljs-number">42</span>;<br>    PRINT(num);  <span class="hljs-comment">// 展开为 printf(&quot;num&quot; &quot; = %d\n&quot;, num);</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>使用 <code>gcc -e</code> 指令查看预宏展开后的文件如下</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"># <span class="hljs-number">5</span> <span class="hljs-string">&quot;c_define.c&quot;</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span> &#123;<br>	<span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-string">&quot; = %d\n&quot;</span>, x);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="操作符（记号链接）"><a href="#操作符（记号链接）" class="headerlink" title="操作符（记号链接）"></a>操作符（记号链接）</h3><p><code>##</code> 操作符用于将两个预处理记号（token）连接成一个新的记号。它可以在宏定义的参数列表或替换文本中使用。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CONCAT(a, b) a##b</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> num10 = <span class="hljs-number">100</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Value: %d\n&quot;</span>, CONCAT(num, <span class="hljs-number">10</span>));  <span class="hljs-comment">// 等价于 printf(&quot;%d&quot;, num10);</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="define与const"><a href="#define与const" class="headerlink" title="define与const"></a><code>define</code>与<code>const</code></h2><p><code>#define</code> 和 <code>const</code> 都可用于定义常量，但它们的实现机制、作用域和使用场景有本质区别。<br><img src="image1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h2 id="条件编译"><a href="#条件编译" class="headerlink" title="条件编译"></a>条件编译</h2><p>宏定义也可以用于条件编译<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> DEBUG</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG(msg) printf(<span class="hljs-string">&quot;[DEBUG] %s\n&quot;</span>, msg)</span><br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br>    <span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG(msg)  <span class="hljs-comment">// 空定义，忽略日志</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-comment">// 检查系统平台</span><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> __linux__</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">define</span> PLATFORM <span class="hljs-string">&quot;Linux&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">elif</span> defined(_WIN32)</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">define</span> PLATFORM <span class="hljs-string">&quot;Windows&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br>    <span class="hljs-meta">#<span class="hljs-keyword">define</span> PLATFORM <span class="hljs-string">&quot;Unknown&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure></p>
+                <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在vmware中安装使用eveng发现报错<code>此平台不支持虚拟化的“amd-v/rvi”</code>，</p>
+<h2 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法 1"></a>解决方法 1</h2><p>上网搜了一下发现是<code>hyper-v</code>与<code>vmware</code>冲突导致，需要将与其相关的功能关闭。</p>
+<ol>
+<li><p>关闭如下图所示功能：<br><img src="image1.png" srcset="/img/loading.gif" lazyload alt="img" title="要关闭的功能"></p>
+</li>
+<li><p>关闭内存完整性<br>打开 Windows 安全中心 -&gt; 设备安全性 -&gt; 内核隔离 -&gt; 内核隔离详细信息，然后将内存完整性关闭。</p>
+</li>
+</ol>
+<h2 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法 2"></a>解决方法 2</h2><p>但是错误并没有解决，继续搜索发现如下解决办法：</p>
+<ol>
+<li><p>Win11 24H2镜像出货的机型会默认打开“Virtualization-based Security（VBS）基于虚拟化的安全性”功能，此功能打开可能会导致部分游戏性能下降卡顿等情况，查看设备是否开启了VBS，<code>Win+R</code>呼出运行框，输入<code>msinfo32</code>查看VBS的运行状态，我的已经关闭了，网图如下：<br><img src="image2.png" srcset="/img/loading.gif" lazyload alt="img" title="基于虚拟化的安全性 正在运行"></p>
+</li>
+<li><p>执行bat脚本，关闭基于虚拟化的安全性。具体脚本内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash">@<span class="hljs-built_in">echo</span> off<br><br>dism /Online /Disable-Feature:microsoft-hyper-v-all /NoRestart<br>dism /Online /Disable-Feature:IsolatedUserMode /NoRestart<br>dism /Online /Disable-Feature:Microsoft-Hyper-V-Hypervisor /NoRestart<br>dism /Online /Disable-Feature:Microsoft-Hyper-V-Online /NoRestart<br>dism /Online /Disable-Feature:HypervisorPlatform /NoRestart<br><br>REM ===========================================<br><br>mountvol X: /s<br>copy %WINDIR%\System32\SecConfig.efi X:\EFI\Microsoft\Boot\SecConfig.efi /Y<br>bcdedit /create &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; /d <span class="hljs-string">&quot;DebugTool&quot;</span> /application osloader<br>bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; path <span class="hljs-string">&quot;\EFI\Microsoft\Boot\SecConfig.efi&quot;</span><br>bcdedit /set &#123;bootmgr&#125; bootsequence &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125;<br>bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; loadoptions DISABLE-LSA-ISO,DISABLE-VBS<br>bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; device partition=X:<br>mountvol X: /d<br>bcdedit /set hypervisorlaunchtype off<br><br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span> =======================================================<br><span class="hljs-built_in">echo</span> 当前操作已完成，接下来请关闭此窗口并重启电脑，然后根据屏幕提示完成剩下操作。<br>pause &gt; nul<br><span class="hljs-built_in">echo</span>.<br><span class="hljs-built_in">echo</span>.<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>将文本保存为<code>.bat</code>格式的文件，右键<code>管理员权限</code>运行，等待设备重启之后，<code>按四次F3</code>，即可关闭。重新打开虚拟机，设备正常。</p>
+</li>
+</ol>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/614643382">https://zhuanlan.zhihu.com/p/614643382</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.51cto.com/wangguangjie/13480278">https://blog.51cto.com/wangguangjie/13480278</a></li>
+</ol>
 
                 
               </div>
@@ -312,7 +315,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/C/" class="print-no-link">#C</a>
+        <a href="/tags/VMware/" class="print-no-link">#VMware</a>
+      
+        <a href="/tags/Windows-11/" class="print-no-link">#Windows 11</a>
+      
+        <a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/" class="print-no-link">#虚拟化</a>
       
     </div>
   
@@ -324,8 +331,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>C语言宏</div>
-      <div>https://1zqqx.github.io/2025/05/10/C语言宏/</div>
+      <div>VMware此平台不支持虚拟化的“amd-v/rvi”的解决方法</div>
+      <div>https://1zqqx.github.io/2025/08/10/VMware此平台不支持虚拟化的“amd-v-rvi”的解决方法/</div>
     </div>
     <div class="license-meta">
       
@@ -337,7 +344,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年5月10日</div>
+          <div>2025年8月10日</div>
         </div>
       
       
@@ -369,18 +376,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/08/10/VMware%E6%AD%A4%E5%B9%B3%E5%8F%B0%E4%B8%8D%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9A%84%E2%80%9Camd-v-rvi%E2%80%9D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" title="VMware此平台不支持虚拟化的“amd-v/rvi”的解决方法">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">VMware此平台不支持虚拟化的“amd-v/rvi”的解决方法</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/04/01/conda%E6%96%87%E6%A1%A3/" title="conda文档">
-                        <span class="hidden-mobile">conda文档</span>
+                      <a href="/2025/05/10/C%E8%AF%AD%E8%A8%80%E5%AE%8F/" title="C语言宏">
+                        <span class="hidden-mobile">C语言宏</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
