@@ -1,0 +1,982 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/brower-avatar.png">
+  <link rel="icon" href="/img/brower-avatar.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="1zqqx">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Table of Content[TOC] 磁盘分区模式在Linux系统中，磁盘分区是管理存储设备的基础，MBR（Master Boot Record，主引导记录） 和 GPT（GUID Partition Table，全局唯一标识分区表） 是两种主流的磁盘分区模式，它们在分区原理、容量支持、安全性等方面存在显著差异，直接影响磁盘的使用范围和稳定性。 MBR分区模式（传统分区模式）MBR是1983">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 磁盘操作">
+<meta property="og:url" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="1zqqx">
+<meta property="og:description" content="Table of Content[TOC] 磁盘分区模式在Linux系统中，磁盘分区是管理存储设备的基础，MBR（Master Boot Record，主引导记录） 和 GPT（GUID Partition Table，全局唯一标识分区表） 是两种主流的磁盘分区模式，它们在分区原理、容量支持、安全性等方面存在显著差异，直接影响磁盘的使用范围和稳定性。 MBR分区模式（传统分区模式）MBR是1983">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image0.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image1.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image2.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image3.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image4.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image5.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image6.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image7.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image8.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image9.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image10.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image11.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image12.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image13.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image14.png">
+<meta property="og:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image15.png">
+<meta property="article:published_time" content="2025-09-19T05:34:37.000Z">
+<meta property="article:modified_time" content="2025-09-19T06:55:08.404Z">
+<meta property="article:author" content="1zqqx">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://1zqqx.github.io/2025/09/19/Linux-%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/image0.png">
+  
+  
+  
+  <title>Linux 磁盘操作 - 1zqqx</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"1zqqx.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>1zqqx</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1028033.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux 磁盘操作"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-09-19 13:34" pubdate>
+          2025年9月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux 磁盘操作</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Table-of-Content"><a href="#Table-of-Content" class="headerlink" title="Table of Content"></a>Table of Content</h2><p>[TOC]</p>
+<h2 id="磁盘分区模式"><a href="#磁盘分区模式" class="headerlink" title="磁盘分区模式"></a>磁盘分区模式</h2><p>在Linux系统中，磁盘分区是管理存储设备的基础，<strong>MBR（Master Boot Record，主引导记录）</strong> 和 <strong>GPT（GUID Partition Table，全局唯一标识分区表）</strong> 是两种主流的磁盘分区模式，它们在分区原理、容量支持、安全性等方面存在显著差异，直接影响磁盘的使用范围和稳定性。</p>
+<h3 id="MBR分区模式（传统分区模式）"><a href="#MBR分区模式（传统分区模式）" class="headerlink" title="MBR分区模式（传统分区模式）"></a>MBR分区模式（传统分区模式）</h3><p>MBR是1983年随IBM PC DOS 2.0推出的传统分区标准，曾长期主导x86架构的磁盘分区，其核心是存储在磁盘<strong>第一个扇区（512字节）</strong> 中的引导记录信息，包含三部分关键内容：</p>
+<ol>
+<li><strong>引导程序（446字节）</strong>：负责在计算机启动时加载操作系统内核（如Linux的GRUB引导程序）；</li>
+<li><strong>分区表（64字节）</strong>：记录磁盘的分区信息，是MBR的核心；</li>
+<li><strong>结束标志（2字节）</strong>：固定为<code>0x55AA</code>，用于标识MBR的有效性。</li>
+</ol>
+<p><strong>MBR的核心特性：</strong></p>
+<ul>
+<li><strong>分区数量限制</strong>：由于分区表仅64字节，每个分区条目占16字节，因此最多支持<strong>4个主分区</strong>；若需创建更多分区，需将1个主分区设为“扩展分区”，再在扩展分区内创建“逻辑分区”（逻辑分区数量受文件系统限制，如Linux下通常不超过15个）。</li>
+<li><strong>磁盘容量限制</strong>：MBR基于32位地址记录扇区，单个磁盘最大支持<strong>2TB</strong>（计算逻辑：每个扇区512字节 × 2³²个扇区 = 2TB）；若磁盘超过2TB，超出部分无法被MBR识别和使用。</li>
+<li><strong>引导方式兼容性</strong>：仅支持<strong>BIOS（Basic Input/Output System）</strong> 引导模式，无法支持UEFI（Unified Extensible Firmware Interface，统一可扩展固件接口）引导。</li>
+<li><strong>安全性缺陷</strong>：MBR分区表仅存一份（位于磁盘第一个扇区），若该扇区因病毒、硬件故障损坏，整个磁盘的分区信息将丢失，且恢复难度较高。</li>
+<li><strong>Linux下的应用场景</strong>：早期Linux服务器、旧款PC（仅支持BIOS）、容量≤2TB的磁盘（如传统机械硬盘、小容量SSD）。</li>
+</ul>
+<h3 id="GPT分区模式（现代分区模式）"><a href="#GPT分区模式（现代分区模式）" class="headerlink" title="GPT分区模式（现代分区模式）"></a>GPT分区模式（现代分区模式）</h3><p>GPT是 UEFI 规范的一部分，旨在解决MBR的容量和安全性限制，采用“全局唯一标识（GUID）”标识分区，其分区信息不再依赖单个扇区，而是通过多份备份和校验机制保障可靠性。</p>
+<p><strong>GPT的核心特性:</strong></p>
+<ul>
+<li><strong>分区数量无限制（理论上）</strong>：GPT默认支持128个主分区（无需扩展分区/逻辑分区），且可通过修改分区表大小支持更多分区，完全满足多系统、多数据分区的需求（如Linux服务器分多个/data、/backup分区）。</li>
+<li><strong>超大容量支持</strong>：基于64位地址记录扇区，单个磁盘最大支持<strong>8EB</strong>（1EB=1024PB=1048576TB），可满足未来超大规模存储（如企业级100TB+ SSD）的需求。</li>
+<li><strong>引导方式兼容性</strong>：原生支持<strong>UEFI引导</strong>（现代计算机的主流引导模式），也可通过“BIOS兼容模式（CSM）”在部分BIOS设备上使用，但需磁盘支持。</li>
+<li><strong>高安全性</strong>：<ul>
+<li>分区表双重备份（主分区表+磁盘尾部的备份分区表）；</li>
+<li>GPT头和分区表均有CRC32校验值，可检测损坏并通过备份恢复；</li>
+<li>分区类型通过GUID精确标识（如Linux根分区GUID为<code>0x8300</code>，EFI系统分区为<code>0xEF00</code>），避免分区类型混淆。</li>
+</ul>
+</li>
+<li><strong>Linux下的应用场景</strong>：现代PC/服务器（支持UEFI）、容量＞2TB的磁盘（如大容量SSD、RAID阵列）、需要多分区的场景（如多系统共存、复杂存储规划）。</li>
+</ul>
+<h3 id="MBR与GPT的核心区别对比"><a href="#MBR与GPT的核心区别对比" class="headerlink" title="MBR与GPT的核心区别对比"></a>MBR与GPT的核心区别对比</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>MBR分区模式</th>
+<th>GPT分区模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>磁盘容量支持</strong></td>
+<td>最大2TB</td>
+<td>最大8EB（理论值）</td>
+</tr>
+<tr>
+<td><strong>分区数量限制</strong></td>
+<td>最多4个主分区（或3主+1扩展+多个逻辑分区）</td>
+<td>默认128个主分区，可扩展</td>
+</tr>
+<tr>
+<td><strong>引导方式</strong></td>
+<td>仅支持BIOS引导</td>
+<td>原生支持UEFI引导，部分支持BIOS兼容模式</td>
+</tr>
+<tr>
+<td><strong>分区表安全性</strong></td>
+<td>仅1份（位于第一个扇区），损坏后难恢复</td>
+<td>主+备份双份，带CRC32校验，可恢复</td>
+</tr>
+<tr>
+<td><strong>分区标识方式</strong></td>
+<td>分区类型ID（1字节，如0x83代表Linux）</td>
+<td>分区类型GUID（16字节，精确唯一）</td>
+</tr>
+<tr>
+<td><strong>工具兼容性</strong></td>
+<td>支持<code>fdisk</code>（Linux）、DiskPart（Windows）等传统工具</td>
+<td>支持<code>gdisk</code>/<code>parted</code>（Linux）、DiskGenius（Windows）等现代工具</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>旧设备（BIOS）、≤2TB磁盘</td>
+<td>新设备（UEFI）、＞2TB磁盘、多分区需求</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="如何选择MBR还是GPT？"><a href="#如何选择MBR还是GPT？" class="headerlink" title="如何选择MBR还是GPT？"></a>如何选择MBR还是GPT？</h3><p>在Linux系统中，分区模式的选择主要取决于<strong>硬件支持</strong>和<strong>存储需求</strong>：</p>
+<ol>
+<li><strong>优先选GPT的情况</strong>：<ul>
+<li>计算机支持UEFI引导（现代设备默认）；</li>
+<li>磁盘容量＞2TB；</li>
+<li>需要创建超过4个分区（如多系统、多数据分区）；</li>
+<li>对数据安全性要求高（如服务器存储关键数据）。</li>
+</ul>
+</li>
+<li><strong>只能选MBR的情况</strong>：<ul>
+<li>计算机仅支持BIOS引导（如老旧服务器、早期PC）；</li>
+<li>磁盘容量≤2TB，且无需多分区（如嵌入式Linux设备）；</li>
+<li>必须兼容仅支持MBR的旧系统或工具。</li>
+</ul>
+</li>
+</ol>
+<h2 id="物理设备命名规则"><a href="#物理设备命名规则" class="headerlink" title="物理设备命名规则"></a>物理设备命名规则</h2><p>在Linux系统中一切都是文件，硬件设备也不例外。既然是文件，就必须有文件名称。系统内核中的 udev 设备管理器会自动把硬件名称规范起来，目的是让用户通过设备文件的名字可以猜出设备大致的属性以及分区信息等；这对于陌生的设备来说特别方便。另外，udev 设备管理器的服务会一直以守护进程的形式运行并侦听内核发出的信号来管理 <code>/dev</code> 目录下的设备文件。Linux 系统中常见的硬件设备及其文件名称如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>硬件设备</th>
+<th>文件名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IDE 设备（电子继承驱动器）</td>
+<td>/dev/hd[a-d]</td>
+</tr>
+<tr>
+<td>SCSI/SATA/U盘</td>
+<td>/dev/sd[a-z]</td>
+</tr>
+<tr>
+<td>virtio 设备（IO 半虚拟化解决方案）</td>
+<td>/dev/vd[a-z]</td>
+</tr>
+<tr>
+<td>打印机</td>
+<td>/dev/lp[0-15]</td>
+</tr>
+<tr>
+<td>鼠标</td>
+<td>/dev/mouse</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>误区 1：/dev目录中sda设备之所以是a，并不是由插槽决定的，而是由系统内核的识别顺序来决定的。</p>
+<p>误区 2：分区的数字编码<code>sda3</code>不一定是强制顺延下来的，也有可能是手工指定的。</p>
+</blockquote>
+<p>设备的文件名称：</p>
+<p>首先，<code>/dev/</code>目录中保存的应当是硬件设备文件；其次，sd 表示的是存储设备；然后，a 表示系统中同类接口中第一个被识别到的设备；最后，5表示这个设备是一个逻辑分区。一言以蔽之，<code>/dev/sda5</code>表示的就是“这是系统中第一块被识别到的硬件设备中分区编号为 5 的逻辑分区的设备文件”。</p>
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><p>Linux 系统支持多种文件系统，常见如下：</p>
+<ol>
+<li><strong>Ext4</strong>：它支持的存储容量高达 1EB（1EB=1,073,741,824GB），且能够有无限多的子目录。另外，Ext4 文件系统能够批量分配 block（块），从而极大地提高了读写效率。现在很多主流服务器也会使用 Ext4 文件系统。</li>
+<li><strong>XFS</strong>：是一种高性能的日志文件系统，而且是RHEL 7/8中默认的文件管理系统。它的优势在发生意外宕机后尤其明显，即可以快速地恢复可能被破坏的文件，而且强大的日志功能只需花费极低的计算和存储性能。它支持的最大存储容量为18EB，这几乎满足了所有需求。</li>
+</ol>
+<blockquote>
+<p>在拿到一块新的硬盘存储设备后，先需要分区，然后再格式化文件系统，最后才能挂载并正常使用。硬盘的分区操作取决于您的需求和硬盘大小；也可以选择不进行分区，但是必须对硬盘进行格式化处理。</p>
+<p>下面有给 vmware 中的 Linux 系统扩容过程。</p>
+</blockquote>
+<h2 id="常用磁盘分区命令"><a href="#常用磁盘分区命令" class="headerlink" title="常用磁盘分区命令"></a>常用磁盘分区命令</h2><h3 id="发现硬盘"><a href="#发现硬盘" class="headerlink" title="发现硬盘"></a>发现硬盘</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 列出块设备与分区</span><br>lsblk -f<br>fdisk -l   <span class="hljs-comment"># 需要 root</span><br><br><span class="hljs-comment"># SCSI 设备列表</span><br>lsscsi<br><br><span class="hljs-comment"># NVMe 设备（如果是 NVMe）</span><br>nvme list<br><br><span class="hljs-comment"># 设备的 UUID/LABEL 信息</span><br>blkid<br><br><span class="hljs-comment"># /dev/disk 下的各种快捷链接（by-uuid, by-id, by-path）</span><br><span class="hljs-built_in">ls</span> -l /dev/disk/by-*<br></code></pre></td></tr></table></figure>
+<h3 id="分区-Partitioning"><a href="#分区-Partitioning" class="headerlink" title="分区 Partitioning"></a>分区 Partitioning</h3><p>选择 GPT 还是 MBR（GPT 推荐用于现代系统、大于2TiB、UEFI）；分区对齐（1MiB）；分区类型标记（LVM/raid 等）。</p>
+<p>常用工具：<code>parted</code>, <code>fdisk</code> (或 <code>cfdisk</code>), <code>gdisk</code>/<code>sgdisk</code> (GPT)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">fdisk /dev/sdb<br><span class="hljs-comment"># n (new), p (primary), &lt;enter&gt; start, &lt;enter&gt; end, t (set type), w (write)</span><br></code></pre></td></tr></table></figure>
+<p>写完分区后让内核识别</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">partprobe /dev/sdb       <span class="hljs-comment"># 通知内核</span><br>partx -a /dev/sdb        <span class="hljs-comment"># 添加分区到内核</span><br><span class="hljs-comment"># 或 kpartx 创建映射（对磁盘镜像有用）</span><br>kpartx -av /dev/sdb<br></code></pre></td></tr></table></figure>
+<h3 id="建立文件系统（mkfs）"><a href="#建立文件系统（mkfs）" class="headerlink" title="建立文件系统（mkfs）"></a>建立文件系统（mkfs）</h3><p>建立文件系统有三条常走的路子</p>
+<h4 id="直接建立文件系统（easy）"><a href="#直接建立文件系统（easy）" class="headerlink" title="直接建立文件系统（easy）"></a>直接建立文件系统（easy）</h4><p>如果不使用 LVM/RAID，直接对 <code>/dev/sdb1</code> mkfs：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">mkfs.ext4 -L data /dev/sdb1<br><span class="hljs-comment"># 或 XFS</span><br>mkfs.xfs -f -L data /dev/sdb1<br><span class="hljs-comment"># btrfs</span><br>mkfs.btrfs -L data /dev/sdb1<br></code></pre></td></tr></table></figure>
+<h4 id="逻辑卷管理（LVM）"><a href="#逻辑卷管理（LVM）" class="headerlink" title="逻辑卷管理（LVM）"></a>逻辑卷管理（LVM）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 假设 /dev/sdb1 已分区并标记为 LVM</span><br>pvcreate /dev/sdb1<br>vgcreate vg_data /dev/sdb1            <span class="hljs-comment"># 或 vgextend existing_vg /dev/sdb1</span><br>lvcreate -n lv_data -L 100G vg_data   <span class="hljs-comment"># 创建逻辑卷</span><br><span class="hljs-comment"># 查看状态</span><br>pvs; vgs; lvs<br><span class="hljs-comment"># 在 LV 上创建文件系统</span><br>mkfs.ext4 /dev/vg_data/lv_data<br>mount /dev/vg_data/lv_data /data<br></code></pre></td></tr></table></figure>
+<p>扩展流程（底层盘扩大或新增 PV）： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 若新 PV 已加入：</span><br>vgextend vg_data /dev/sdc1<br>lvextend -l +100%FREE /dev/vg_data/lv_data   <span class="hljs-comment"># 扩展 LV</span><br><span class="hljs-comment"># 扩展文件系统</span><br>resize2fs /dev/vg_data/lv_data       <span class="hljs-comment"># ext4 (可在线扩展)</span><br><span class="hljs-comment"># 或</span><br>xfs_growfs /data                     <span class="hljs-comment"># xfs 必须以挂载点为参数，且挂载时可扩展</span><br></code></pre></td></tr></table></figure>
+<h4 id="RAID"><a href="#RAID" class="headerlink" title="RAID"></a>RAID</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br></code></pre></td></tr></table></figure>
+<h3 id="持久化挂载（mount、-etc-fstab）"><a href="#持久化挂载（mount、-etc-fstab）" class="headerlink" title="持久化挂载（mount、/etc/fstab）"></a>持久化挂载（mount、/etc/fstab）</h3><p>添加到 /etc/fstab 推荐使用 UUID：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 得到 UUID</span><br>blkid /dev/sdb1<br><span class="hljs-comment"># /etc/fstab 示例</span><br>UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  /data  ext4  defaults,noatime  0 2<br><br><span class="hljs-comment"># 重新加载并挂载</span><br>mount -a<br><span class="hljs-comment"># 或单独挂载</span><br>mount /dev/sdb1 /data<br></code></pre></td></tr></table></figure>
+<h3 id="常用命令一览表"><a href="#常用命令一览表" class="headerlink" title="常用命令一览表"></a>常用命令一览表</h3><p><strong>检测/识别</strong></p>
+<ul>
+<li><code>dmesg | tail</code>、<code>journalctl -k</code></li>
+<li><code>lsblk -f</code>, <code>fdisk -l</code>, <code>blkid</code>, <code>nvme list</code>, <code>lsscsi</code></li>
+</ul>
+<p><strong>重扫描</strong></p>
+<ul>
+<li><code>for h in /sys/class/scsi_host/host*; do echo &quot;- - -&quot; &gt; $h/scan; done</code></li>
+<li><code>echo 1 &gt; /sys/class/block/sdX/device/rescan</code></li>
+<li><code>udevadm trigger; udevadm settle</code></li>
+</ul>
+<p><strong>分区</strong></p>
+<ul>
+<li><code>parted /dev/sdX</code>, <code>fdisk /dev/sdX</code>, <code>sgdisk -n ... /dev/sdX</code></li>
+<li><code>partprobe /dev/sdX</code>, <code>partx -a /dev/sdX</code>, <code>kpartx -av /dev/image</code></li>
+</ul>
+<p><strong>LVM</strong></p>
+<ul>
+<li><code>pvcreate</code>, <code>pvdisplay</code>, <code>vgcreate</code>, <code>vgextend</code>, <code>lvcreate</code>, <code>lvextend</code>, <code>lvresize</code>, <code>pvs</code>, <code>vgs</code>, <code>lvs</code>, <code>pvresize</code></li>
+</ul>
+<p><strong>RAID</strong></p>
+<ul>
+<li><code>mdadm --create/detail/assemble --manage</code>, <code>cat /proc/mdstat</code>, <code>mdadm --detail --scan</code></li>
+</ul>
+<p><strong>文件系统</strong></p>
+<ul>
+<li><code>mkfs.ext4</code>, <code>mkfs.xfs</code>, <code>mkfs.btrfs</code>, <code>fsck.ext4</code>, <code>xfs_repair</code>, <code>resize2fs</code>, <code>xfs_growfs</code></li>
+</ul>
+<p><strong>加密</strong></p>
+<ul>
+<li><code>cryptsetup luksFormat</code>, <code>cryptsetup luksOpen</code>, <code>/etc/crypttab</code></li>
+</ul>
+<p><strong>挂载/持久化</strong></p>
+<ul>
+<li><code>mount</code>, <code>umount</code>, <code>findmnt</code>, <code>blkid</code>, 编辑 <code>/etc/fstab</code>，<code>mount -a</code></li>
+</ul>
+<p><strong>诊断/工具</strong></p>
+<ul>
+<li><code>tune2fs</code>, <code>wipefs</code>, <code>kpartx</code>, <code>losetup -fP</code>, <code>udevadm info -q all -n /dev/sdX</code></li>
+</ul>
+<h2 id="给-VMware-中-Ubuntu-live-server-扩容"><a href="#给-VMware-中-Ubuntu-live-server-扩容" class="headerlink" title="给 VMware 中 Ubuntu live server 扩容"></a>给 VMware 中 Ubuntu live server 扩容</h2><p>VMware 中的 ubuntu 虚拟机磁盘空间使用已经达到 89%，下面给该虚拟机根目录扩容</p>
+<p><img src="image0.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="发现硬盘-1"><a href="#发现硬盘-1" class="headerlink" title="发现硬盘"></a>发现硬盘</h3><ul>
+<li><strong>目的</strong>：让操作系统知道有新硬盘，并在 <code>/dev/</code> 下生成对应的设备节点，比如 <code>/dev/sda</code>。</li>
+<li><strong>类比</strong>：就像你插了一块新 U 盘，电脑必须先“认出来”才行。</li>
+<li>常用命令：<code>lsblk</code>, <code>fdisk -l</code>, <code>dmesg | tail</code></li>
+</ul>
+<p>首先在 ubuntu 的属性中，将设备的硬盘调大。</p>
+<p><img src="image1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可能需要重启虚拟机才能在虚拟机中看到。</p>
+<p><code>fdisk -l</code></p>
+<p><img src="image2.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><code>lsblk</code></p>
+<p><img src="image3.png" srcset="/img/loading.gif" lazyload alt="sda 总共80GB sda1、2、3占用40GB（扩容之前设置的虚拟机磁盘容量）"></p>
+<h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><ul>
+<li><strong>目的</strong>：把一整块盘切成逻辑区域（分区），便于管理。</li>
+<li><strong>类比</strong>：就像一栋楼，你要先分“房间”（分区），然后才能给每个房间安排用途。</li>
+<li><strong>工具</strong>：<code>fdisk</code>, <code>parted</code>, <code>gdisk</code>。</li>
+<li><strong>结果</strong>：会出现 <code>/dev/sdb1</code>, <code>/dev/sdb2</code> 这样的设备。</li>
+</ul>
+<ol>
+<li>首先确定对哪一块存储设备分区，<code>sda</code>设备显然多出40GB的空闲磁盘。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> fdisk /dev/sda<br></code></pre></td></tr></table></figure>
+<p><img src="image4.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ol>
+<li><p><img src="image5.png" srcset="/img/loading.gif" lazyload alt="2、键入 m 查看帮助"></p>
+</li>
+<li></li>
+</ol>
+<p><img src="image6.png" srcset="/img/loading.gif" lazyload alt="3、创建一个新的分区"></p>
+<ul>
+<li><code>Partition number</code>可以自己指定，就是分区完成后 sda1、sda2、sda3 中后边的数字。</li>
+<li><code>First sector / First sector</code> 是分区起始结束位置。回车默认使用空闲分区的全部。</li>
+</ul>
+<p><img src="image7.png" srcset="/img/loading.gif" lazyload alt="cmd p 查看此时分区情况"></p>
+<p>确认分区无误后就可以输入 w ，保存写入刚才的操作。如果之前的操作有误，可以输入 q 重新划分，之前的操作不会生效。</p>
+<p><img src="image8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>使用<code>df -h</code>发现磁盘的可使用空间没有变化，此时还不能使用这块新建的分区，还差最后一步建立文件系统。</p>
+<h3 id="卷管理-RAID-加密（可选层）"><a href="#卷管理-RAID-加密（可选层）" class="headerlink" title="卷管理 / RAID / 加密（可选层）"></a>卷管理 / RAID / 加密（可选层）</h3><h3 id="创建文件系统（格式化分区）"><a href="#创建文件系统（格式化分区）" class="headerlink" title="创建文件系统（格式化分区）"></a>创建文件系统（格式化分区）</h3><ul>
+<li><strong>目的</strong>：在分区或逻辑卷上建立文件系统（ext4、xfs 等）。没有文件系统，数据无法被 OS 组织。</li>
+<li><strong>类比</strong>：房间有了，要装上“柜子”和“抽屉”来放东西（文件系统就是这些存储结构）。</li>
+<li><strong>命令</strong>：<code>mkfs.ext4 /dev/sdb1</code>/<code>mkfs.xfs /dev/sdb1</code></li>
+</ul>
+<ol>
+<li><p><img src="image9.png" srcset="/img/loading.gif" lazyload alt="使用 df -T 查看之前的文件系统格式"></p>
+</li>
+<li></li>
+</ol>
+<p><img src="image10.png" srcset="/img/loading.gif" lazyload alt="使用 mkfs.ext4 建立 ext4 格式文件系统"></p>
+<p>此时才能真正的存放文件。</p>
+<h3 id="挂载（mount）扩容根目录-5-6"><a href="#挂载（mount）扩容根目录-5-6" class="headerlink" title="挂载（mount）扩容根目录 5.6"></a>挂载（mount）扩容根目录 5.6</h3><ul>
+<li><strong>目的</strong>：把文件系统挂到目录树（如 <code>/data</code>），这样用户才能通过路径访问。</li>
+<li><strong>类比</strong>：房间建好了，还得给它挂个门牌号（目录名），否则你找不到这个房间。</li>
+<li><strong>命令</strong>：<code>mkdir /data</code>/<code>mount /dev/sdb1 /data</code></li>
+<li>不挂载，文件系统只是存在但无法使用。</li>
+</ul>
+<blockquote>
+<p>如果根目录 <code>/</code> 已经有一个文件系统（通常是 <code>ext4</code> 或 <code>xfs</code>），所以要扩容它，必须让这个文件系统所在的块设备“变大”。也就是说，新盘不能简单 <code>mount /dev/sdb1 /</code>（这样会覆盖原 <code>/</code>，系统直接挂掉）。正确做法是让新空间并入现有的根分区/逻辑卷，再扩展文件系统。</p>
+</blockquote>
+<h3 id="扩容（-）"><a href="#扩容（-）" class="headerlink" title="扩容（/）"></a>扩容（/）</h3><h4 id="场景-1（根目录不在-LVM-中，直接扩容）"><a href="#场景-1（根目录不在-LVM-中，直接扩容）" class="headerlink" title="场景 1（根目录不在 LVM 中，直接扩容）"></a>场景 1（根目录不在 LVM 中，直接扩容）</h4><p>如果你在 VMware 里给原根磁盘（如 <code>/dev/sda</code>）直接扩容：</p>
+<ol>
+<li>在宿主机 (VMware) 增大虚拟磁盘大小。</li>
+<li>在 Linux 内核里 <code>echo 1 &gt; /sys/class/block/sda/device/rescan</code> 或 <code>rescan-scsi-bus</code>。</li>
+<li>用 <code>growpart /dev/sda 2</code>（假设根分区是 <code>/dev/sda2</code>）调整分区大小。</li>
+<li>扩展文件系统：<ul>
+<li><code>resize2fs /dev/sda2</code> （ext4）</li>
+<li><code>xfs_growfs /</code> （xfs，参数必须是挂载点）。</li>
+</ul>
+</li>
+</ol>
+<p>这样根目录 <code>/</code> 会变大，不需要重新挂载。</p>
+<h4 id="场景-2（根目录在-LVM-中）"><a href="#场景-2（根目录在-LVM-中）" class="headerlink" title="场景 2（根目录在 LVM 中）"></a>场景 2（根目录在 LVM 中）</h4><ol>
+<li>修改文件类型</li>
+</ol>
+<p>使用 LVM 管理扩展逻辑卷，要修改上面创建分区时选择的类型，如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 1.</span><br><span class="hljs-built_in">sudo</span> fdisk /dev/sda<br><br><span class="hljs-comment"># 2.</span><br>Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): p<br><br>Device        Start       End  Sectors Size Type<br>/dev/sda1      2048      4095     2048   1M BIOS boot<br>/dev/sda2      4096   4198399  4194304   2G Linux filesystem<br>/dev/sda3   4198400  83884031 79685632  38G Linux filesystem<br>/dev/sda4  83884032 167772126 83888095  40G Linux filesystem<br><br><span class="hljs-comment"># 3.m -&gt; t   change a partition type</span><br>Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): t<br>Partition number (1-4, default 4): 4<br>Partition <span class="hljs-built_in">type</span> or <span class="hljs-built_in">alias</span> (<span class="hljs-built_in">type</span> L to list all): L<br>...<br>30 Linux LVM                      E6D6D379-F507-44C2-A23C-238F2A3DF928<br>...<br>Partition <span class="hljs-built_in">type</span> or <span class="hljs-built_in">alias</span> (<span class="hljs-built_in">type</span> L to list all): lvm<br>Changed <span class="hljs-built_in">type</span> of partition <span class="hljs-string">&#x27;Linux filesystem&#x27;</span> to <span class="hljs-string">&#x27;Linux LVM&#x27;</span>.<br><br>Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): p<br><br>Device        Start       End  Sectors Size Type<br>/dev/sda1      2048      4095     2048   1M BIOS boot<br>/dev/sda2      4096   4198399  4194304   2G Linux filesystem<br>/dev/sda3   4198400  83884031 79685632  38G Linux filesystem<br>/dev/sda4  83884032 167772126 83888095  40G Linux LVM<br><br>Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): w<br>The partition table has been altered.<br>Syncing disks.<br></code></pre></td></tr></table></figure>
+<ol>
+<li>把分区加入 LVM：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo pvcreate /dev/sda4<br>sudo vgextend ubuntu-vg /dev/sda4<br></code></pre></td></tr></table></figure>
+<p><img src="image11.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="image12.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>查看确认系统是否使用 LVM<code>lsblk -f</code>， 可以看到每个分区的 FSTYPE，如果是 <code>LVM2_member</code>，说明它属于 LVM；如果直接是 <code>ext4</code> / <code>xfs</code>，说明就是普通分区文件系统。  </p>
+<p><code>sudo vgs</code> <code>sudo lvs</code> <code>sudo pvs</code>vgs：列出现有卷组（VG）的名字。lvs：列出逻辑卷（LV），以及它挂在哪个 VG 上。pvs：列出物理卷（PV）对应的设备。</p>
+</blockquote>
+<ol>
+<li>扩展根逻辑卷：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv<br></code></pre></td></tr></table></figure>
+<p><img src="image13.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>不同系统此处名称不同</p>
+<p><img src="image14.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</blockquote>
+<ol>
+<li>扩展文件系统：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo resize2fs /dev/centos/root   # ext4<br># xfs_growfs /                 # xfs<br></code></pre></td></tr></table></figure>
+<p><img src="image15.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>至此，扩容完毕，这是生产环境里最常用的方式：新盘不会单独挂载，而是通过 LVM 加入根卷组，根目录就透明地扩容了。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1916590652310942157">https://zhuanlan.zhihu.com/p/1916590652310942157</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/iubolgs/p/15639039.html">https://www.cnblogs.com/iubolgs/p/15639039.html</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux 磁盘操作</div>
+      <div>https://1zqqx.github.io/2025/09/19/Linux-磁盘操作/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>1zqqx</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年9月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/09/14/Linux-%E7%94%A8%E6%88%B7-%E7%94%A8%E6%88%B7%E7%BB%84%E7%AE%A1%E7%90%86/" title="Linux 用户&amp;用户组管理">
+                        <span class="hidden-mobile">Linux 用户&amp;用户组管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"1zqqx/gitpage_comment","repo-id":"R_kgDOOQnpIg","category":"General","category-id":"DIC_kwDOOQnpIs4Cokoo","theme":"preferred_color_scheme","mapping":"pathname","reactions-enabled":1,"emit-metadata":1,"input-position":"top","lang":"zh-CN","loading":"lazy","crossorigin":"anonymous"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
